@@ -81,3 +81,12 @@
     --modal-bg: rgba(253, 246, 227, 0.95);
   }
 }
+@keyframes popIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-pop {
+  animation: popIn 0.2s ease-out forwards;
+}

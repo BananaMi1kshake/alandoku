@@ -49,9 +49,8 @@ function App() {
   const [isPaused, setIsPaused] = useState(() => loadState('sudoku-paused', false));
 
   // --- UI NAVIGATION STATE ---
-  // If game was playing or paused, open straight to the game. Otherwise, open to main menu.
   const initialView = loadState('sudoku-status', 'idle') === 'playing' || loadState('sudoku-status', 'idle') === 'paused' ? 'game' : 'main';
-  const [activeTab, setActiveTab] = useState(initialView); // 'main', 'daily', 'me', 'game'
+  const [activeTab, setActiveTab] = useState(initialView); 
   const [showDifficultySheet, setShowDifficultySheet] = useState(false);
   
   const [theme, setTheme] = useState(() => loadState('sudoku-theme', 'light'));
@@ -60,7 +59,7 @@ function App() {
   const [animatingCells, setAnimatingCells] = useState([]);
 
   // Sub-menus for the 'Me' tab
-  const [meSubView, setMeSubView] = useState(null); // 'stats', 'settings', null
+  const [meSubView, setMeSubView] = useState(null); 
   const [statsTab, setStatsTab] = useState('Easy');
 
   // Calendar Helpers
@@ -110,7 +109,6 @@ function App() {
 
   useEffect(() => {
     let interval = null;
-    // Only tick timer if we are explicitly IN the game view and unpaused
     if (gameStatus === 'playing' && !isPaused && activeTab === 'game') {
       interval = setInterval(() => setTime((prev) => prev + 1), 1000);
     } else {
@@ -183,7 +181,7 @@ function App() {
   }, [numberCounts, lockedNumber]);
 
   const startNewGame = (selectedDifficulty, dateStr = null) => {
-    const blanks = DIFFICULTIES[selectedDifficulty] || 45; // Default to Medium if undefined
+    const blanks = DIFFICULTIES[selectedDifficulty] || 45; 
     setBoard(generateSudoku(blanks, dateStr));
     setDifficulty(dateStr ? 'Daily' : selectedDifficulty);
     setDailyDate(dateStr);
@@ -198,7 +196,7 @@ function App() {
     setAnimatingCells([]);
     setGameStatus('playing');
     setShowDifficultySheet(false);
-    setActiveTab('game'); // Switch to game view immediately
+    setActiveTab('game'); 
 
     setStats(prev => {
       const next = JSON.parse(JSON.stringify(prev));
@@ -210,7 +208,6 @@ function App() {
   };
 
   const restartCurrentGame = () => {
-    // Reset board to initial generated state
     setBoard(prev => prev.map(cell => ({ ...cell, value: cell.isGiven ? cell.solution : null, isError: false, notes: [] })));
     setMistakes(0);
     setTime(0);
@@ -301,7 +298,7 @@ function App() {
       const clearedBoard = clearNotesFromPeers(newBoard, hint.index, hint.value);
       checkForCompletionAnimations(clearedBoard, newBoard[hint.index]);
       
-      setSelectedCell(hint.index); // Auto-select the hinted cell so user sees it
+      setSelectedCell(hint.index); 
       return clearedBoard;
     });
     triggerVibration(25);
@@ -392,29 +389,12 @@ function App() {
 
   const toggleSetting = (key) => setSettings(prev => ({ ...prev, [key]: !prev[key] }));
 
-  const getCellBorders = (row, col) => {
-    let classes = "border border-[var(--border-thin)] "; 
-    if (row === 2 || row === 5) classes += "border-b-[var(--border-thick)] border-b-2 ";
-    if (col === 2 || col === 5) classes += "border-r-[var(--border-thick)] border-r-2 ";
-    if (row === 0) classes += "border-t-[var(--border-thick)] border-t-2 ";
-    if (row === 8) classes += "border-b-[var(--border-thick)] border-b-2 ";
-    if (col === 0) classes += "border-l-[var(--border-thick)] border-l-2 ";
-    if (col === 8) classes += "border-r-[var(--border-thick)] border-r-2 ";
-    return classes;
-  };
-
-  const activeCell = selectedCell !== null ? board[selectedCell] : null;
-  const highlightValue = lockedNumber !== null ? lockedNumber : (activeCell ? activeCell.value : null);
-  const controlsDisabled = gameStatus !== 'playing' || isPaused;
-  const themeClass = theme === 'dark' ? 'theme-dark' : theme === 'sepia' ? 'theme-sepia' : '';
-
   // --- RENDER HELPERS FOR EACH TAB ---
 
   const renderMainTab = () => (
     <div className="flex flex-col items-center w-full max-w-md h-full px-4 pt-12 pb-24 relative">
       <h1 className="text-2xl font-extrabold text-[#0b5394] mb-8 tracking-wide">Alandoku</h1>
       
-      {/* Daily Challenge Card matches screenshot */}
       <div className="w-full flex gap-4 mb-10">
         <button onClick={() => setActiveTab('daily')} className="flex-1 aspect-square bg-blue-500 rounded-xl shadow-md flex flex-col items-center justify-center text-white p-4 transition-transform active:scale-95">
           <div className="text-4xl mb-2">📅</div>
@@ -428,7 +408,6 @@ function App() {
         </button>
       </div>
 
-      {/* All Time Best Score matches screenshot */}
       <div className="text-center mb-auto mt-4">
         <div className="text-sm text-[var(--text-muted)] font-semibold mb-1">All-Time Best Score</div>
         <div className="text-3xl font-extrabold text-[var(--text-main)] flex items-center justify-center gap-2">
@@ -436,7 +415,6 @@ function App() {
         </div>
       </div>
 
-      {/* Continue or New Game Button */}
       <div className="w-full flex flex-col gap-3 mt-12">
         {(gameStatus === 'playing' || gameStatus === 'paused') && board.length > 0 && (
           <button onClick={() => setActiveTab('game')} className="w-full bg-[var(--text-user)] text-[var(--bg-board)] font-bold text-lg py-4 rounded-full shadow-lg active:scale-95 transition-transform">
@@ -452,7 +430,6 @@ function App() {
 
   const renderDailyTab = () => (
     <div className="flex flex-col items-center w-full max-w-md h-full pb-24 overflow-y-auto">
-      {/* Blue header matches screenshot */}
       <div className="w-full bg-gradient-to-b from-blue-500 to-blue-600 text-white flex flex-col items-center pt-10 pb-8 rounded-b-3xl shadow-md">
         <h2 className="text-lg font-bold mb-4">Daily Challenges</h2>
         <div className="text-7xl">🏆</div>
@@ -468,7 +445,6 @@ function App() {
           <div key={i} className="text-center text-xs font-bold text-[var(--text-muted)]">{d}</div>
         ))}
         
-        {/* Padding for first day */}
         {[...Array(new Date(currentYear, currentMonth, 1).getDay())].map((_, i) => (
           <div key={`empty-${i}`}></div>
         ))}
@@ -501,7 +477,6 @@ function App() {
   );
 
   const renderMeTab = () => {
-    // If a subview is active (Stats or Settings), render that instead of the list
     if (meSubView === 'stats') {
       return (
         <div className="flex flex-col items-center w-full max-w-md h-full px-6 pt-10 pb-24 overflow-y-auto">
@@ -567,7 +542,6 @@ function App() {
       );
     }
 
-    // Default 'Me' List matches screenshot
     return (
       <div className="flex flex-col items-center w-full max-w-md h-full px-4 pt-10 pb-24 overflow-y-auto">
         <h2 className="text-xl font-bold text-[var(--text-main)] mb-6">Me</h2>
@@ -602,7 +576,6 @@ function App() {
   const renderGame = () => (
     <div className="w-full max-w-md h-full flex flex-col items-center pt-2 pb-6 relative">
       
-      {/* Top Header matching screenshot */}
       <div className="w-full flex justify-between items-center px-4 mb-3">
         <button onClick={() => { setActiveTab('main'); setIsPaused(true); }} className="text-[var(--text-user)] text-3xl font-bold w-10 active:scale-90">‹</button>
         <div className="text-lg font-bold text-[var(--text-main)] tracking-widest">{formatTime(time)}</div>
@@ -613,7 +586,6 @@ function App() {
         </div>
       </div>
 
-      {/* Sub Header matching screenshot */}
       <div className="w-full flex justify-between px-4 mb-4 text-[10px] sm:text-xs text-[var(--text-muted)] uppercase font-semibold">
         <div className="text-center">All Time<br/><span className="text-[var(--text-main)] font-bold text-xs sm:text-sm lowercase tracking-tight">🏆 {allTimeBestScore.toLocaleString()}</span></div>
         <div className="text-center">Difficulty<br/><span className="text-[var(--text-main)] font-bold text-xs sm:text-sm capitalize">{difficulty}</span></div>
@@ -627,7 +599,7 @@ function App() {
       <div className="w-full relative px-1 sm:px-4 mb-4">
         
         {isPaused && gameStatus === 'playing' && (
-          <div className="absolute inset-0 z-20 mx-4 bg-[var(--bg-app)] flex flex-col items-center justify-center p-6 text-center border-2 border-[var(--border-thin)] shadow-sm">
+          <div className="absolute inset-0 z-50 bg-[var(--bg-app)] flex flex-col items-center justify-center p-6 text-center border-2 border-[var(--border-thin)] shadow-sm">
             <div className="text-6xl mb-4">⏸</div>
             <h2 className="text-3xl font-bold mb-6">Paused</h2>
             <button onClick={() => setIsPaused(false)} className="bg-[var(--text-user)] text-[var(--bg-board)] font-bold py-3 px-10 rounded-full shadow-lg active:scale-95 transition-transform">Resume</button>
@@ -635,7 +607,7 @@ function App() {
         )}
 
         {gameStatus !== 'playing' && (
-          <div className="absolute inset-0 z-10 mx-4 bg-[var(--modal-bg)] backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center border border-[var(--border-thin)] shadow-lg">
+          <div className="absolute inset-0 z-50 bg-[var(--modal-bg)] backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center border border-[var(--border-thin)] shadow-lg">
             <h2 className={`text-4xl font-bold mb-2 ${gameStatus === 'won' ? 'text-[var(--text-user)]' : 'text-[var(--text-error)]'}`}>{gameStatus === 'won' ? 'Excellent!' : 'Game Over'}</h2>
             <p className="text-[var(--text-muted)] mb-2 font-medium">{gameStatus === 'won' ? `You solved it in ${formatTime(time)}` : 'You made 3 mistakes.'}</p>
             <p className="text-xl font-bold text-[var(--text-user)] mb-6">Final Score: {score}</p>
@@ -660,7 +632,6 @@ function App() {
             if (cell.isGiven) textClass = "text-[var(--text-given)] font-bold";
             if (cell.isError) textClass = "text-[var(--text-error)] font-medium";
 
-            // Determine if we need to draw thick grid lines
             const isRightBorder = cell.col === 2 || cell.col === 5;
             const isBottomBorder = cell.row === 2 || cell.row === 5;
             
@@ -676,7 +647,10 @@ function App() {
                 `}
               >
                 <div className={`absolute inset-0 bg-[var(--text-main)] pointer-events-none transition-opacity duration-500 ease-out ${isAnimating ? 'opacity-20' : 'opacity-0'}`}></div>
-                {cell.value && <span className="relative z-10">{cell.value}</span>}
+                
+                {/* Pop-in animation applied here */}
+                {cell.value && <span className="relative z-10 animate-pop inline-block">{cell.value}</span>}
+                
                 {!cell.value && cell.notes && cell.notes.length > 0 && (
                   <div className="relative z-10 grid grid-cols-3 grid-rows-3 w-full h-full text-[10px] sm:text-[11px] text-[var(--text-notes)] p-[1px] pointer-events-none">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => (
@@ -690,8 +664,7 @@ function App() {
         </div>
       </div>
 
-      {/* Action Bar matching screenshot */}
-      <div className="w-full px-6 flex justify-between mb-6">
+      <div className="w-full px-6 flex justify-between mb-6 mt-2">
         <button onClick={handleUndo} disabled={history.length === 0 || controlsDisabled} className={`flex flex-col items-center gap-1 ${history.length === 0 || controlsDisabled ? 'opacity-40' : 'active:scale-95'}`}>
           <div className="text-2xl text-[var(--text-user)] mb-1">↺</div>
           <span className="text-xs font-semibold text-[var(--text-muted)]">Undo</span>
@@ -716,7 +689,6 @@ function App() {
         </button>
       </div>
 
-      {/* Number Pad matching screenshot */}
       <div className="w-full flex justify-between px-4">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => {
           const isLocked = lockedNumber === num;
@@ -733,13 +705,11 @@ function App() {
   return (
     <div className={`h-screen w-screen bg-[var(--bg-app)] text-[var(--text-main)] flex justify-center font-sans select-none overflow-hidden transition-colors duration-300 ${themeClass}`}>
       
-      {/* Render the Active View */}
       {activeTab === 'main' && renderMainTab()}
       {activeTab === 'daily' && renderDailyTab()}
       {activeTab === 'me' && renderMeTab()}
       {activeTab === 'game' && renderGame()}
 
-      {/* BOTTOM NAVIGATION TABS - Hidden during gameplay */}
       {activeTab !== 'game' && (
         <div className="absolute bottom-0 w-full max-w-md bg-[var(--bg-board)] border-t border-[var(--border-thin)] flex justify-around items-center pb-8 pt-3 z-40">
           <button onClick={() => { setActiveTab('main'); setMeSubView(null); }} className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'main' ? 'text-[var(--text-user)]' : 'text-[var(--text-muted)] hover:opacity-80'}`}>
@@ -757,13 +727,9 @@ function App() {
         </div>
       )}
 
-      {/* iOS-Style Difficulty Bottom Sheet matches screenshot */}
       {showDifficultySheet && activeTab === 'main' && (
         <>
-          {/* Dark backdrop */}
           <div className="absolute inset-0 bg-black/40 z-50 transition-opacity" onClick={() => setShowDifficultySheet(false)}></div>
-          
-          {/* Action Sheet */}
           <div className="absolute bottom-0 w-full max-w-md bg-[var(--bg-board)] rounded-t-3xl shadow-2xl z-50 flex flex-col pb-10 pt-4 animate-[slideUp_0.3s_ease-out]">
             <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
             {Object.keys(DIFFICULTIES).map((level, index, arr) => (
@@ -781,7 +747,6 @@ function App() {
         </>
       )}
 
-      {/* Standard CSS keyframes for the bottom sheet slide up animation */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes slideUp {
           from { transform: translateY(100%); }
