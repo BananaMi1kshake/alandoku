@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* DEFAULT: LIGHT THEME */
+    --bg-app: #f9fafb;
+    --bg-board: #ffffff;
+    --bg-cell: #ffffff;
+    --bg-selected: #bfdbfe; /* blue-200 */
+    --bg-peer: #eff6ff; /* blue-50 */
+    --bg-same: #93c5fd; /* blue-300 */
+    
+    --text-main: #1f2937; /* gray-800 */
+    --text-muted: #4b5563; /* gray-600 */
+    --text-given: #111827; /* gray-900 */
+    --text-user: #2563eb; /* blue-600 */
+    --text-error: #ef4444; /* red-500 */
+    --text-notes: #6b7280; /* gray-500 */
+    
+    --border-thin: #e5e7eb; /* gray-200 */
+    --border-thick: #1f2937; /* gray-800 */
+    
+    --btn-bg: #ffffff;
+    --btn-active: #e5e7eb; /* gray-200 */
+    --btn-locked: #2563eb; /* blue-600 */
+    --btn-locked-text: #ffffff;
+    
+    --modal-bg: rgba(255, 255, 255, 0.95);
+  }
+
+  .theme-dark {
+    --bg-app: #111827; /* gray-900 */
+    --bg-board: #1f2937; /* gray-800 */
+    --bg-cell: #1f2937;
+    --bg-selected: #374151; /* gray-700 */
+    --bg-peer: #111827; /* gray-900 */
+    --bg-same: #4b5563; /* gray-600 */
+    
+    --text-main: #f3f4f6; /* gray-100 */
+    --text-muted: #9ca3af; /* gray-400 */
+    --text-given: #f3f4f6; /* gray-100 */
+    --text-user: #60a5fa; /* blue-400 */
+    --text-error: #f87171; /* red-400 */
+    --text-notes: #9ca3af; /* gray-400 */
+    
+    --border-thin: #374151; /* gray-700 */
+    --border-thick: #000000;
+    
+    --btn-bg: #1f2937;
+    --btn-active: #374151;
+    --btn-locked: #60a5fa;
+    --btn-locked-text: #111827;
+    
+    --modal-bg: rgba(31, 41, 55, 0.95);
+  }
+
+  .theme-sepia {
+    /* Newspaper / Coffee colors */
+    --bg-app: #f4ecd8;
+    --bg-board: #fdf6e3;
+    --bg-cell: #fdf6e3;
+    --bg-selected: #eaddc0;
+    --bg-peer: #f0e4cc;
+    --bg-same: #d9c8a3;
+    
+    --text-main: #433422;
+    --text-muted: #6b5a48;
+    --text-given: #433422;
+    --text-user: #0b5394;
+    --text-error: #cc0000;
+    --text-notes: #8b7a66;
+    
+    --border-thin: #d9c8a3;
+    --border-thick: #5c4731;
+    
+    --btn-bg: #fdf6e3;
+    --btn-active: #eaddc0;
+    --btn-locked: #0b5394;
+    --btn-locked-text: #ffffff;
+    
+    --modal-bg: rgba(253, 246, 227, 0.95);
+  }
+}
